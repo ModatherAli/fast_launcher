@@ -2,10 +2,17 @@ import 'package:flutter/material.dart';
 
 import '../services/launcher_services.dart';
 
-class LauncherScreen extends StatelessWidget {
+class LauncherScreen extends StatefulWidget {
   final String url;
-  LauncherScreen({super.key, required this.url});
+  const LauncherScreen({super.key, required this.url});
+
+  @override
+  State<LauncherScreen> createState() => _LauncherScreenState();
+}
+
+class _LauncherScreenState extends State<LauncherScreen> {
   final TextEditingController _controller = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,17 +24,32 @@ class LauncherScreen extends StatelessWidget {
             width: double.infinity,
             height: 200,
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 15),
-            child: TextField(
-              controller: _controller,
-              decoration: const InputDecoration(border: OutlineInputBorder()),
-              maxLines: null,
-            ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: _controller,
+                  decoration: InputDecoration(
+                      border: const OutlineInputBorder(),
+                      helperText: widget.url,
+                      contentPadding:
+                          const EdgeInsets.symmetric(horizontal: 10)),
+                  maxLines: null,
+                ),
+              ),
+              IconButton(
+                onPressed: () {
+                  _controller.clear();
+                  setState(() {});
+                },
+                icon: const Icon(Icons.delete),
+              ),
+            ],
           ),
           OutlinedButton(
               onPressed: () {
-                LauncherServices.lunchUrl(url + _controller.text);
+                LauncherServices.lunchUrl(widget.url + _controller.text);
               },
               child: const Text('Open')),
         ],
